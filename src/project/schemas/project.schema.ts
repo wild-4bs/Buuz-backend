@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 
 @Schema({
   timestamps: true,
@@ -16,6 +17,8 @@ export class project {
   thumbnail: string;
   @Prop({ required: true })
   video: string;
+  @Prop({ type: Types.ObjectId, ref: 'page' })
+  page: Types.ObjectId
 }
 
 export const projectSchema = SchemaFactory.createForClass(project);

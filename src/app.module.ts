@@ -7,6 +7,8 @@ import { ProjectController } from './project/project.controller';
 import { ProjectModule } from './project/project.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ValueController } from './value/value.controller';
+import { ValueModule } from './value/value.module';
 
 @Module({
   imports: [
@@ -17,8 +19,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(process.env.DB_URI as string),
     PageModule,
     ProjectModule,
+    ValueModule,
   ],
-  controllers: [AppController, PageController, ProjectController],
+  controllers: [AppController, PageController, ProjectController, ValueController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

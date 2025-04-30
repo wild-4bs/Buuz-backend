@@ -1,31 +1,27 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'; // أزلنا @Inject
-import { PageService } from './page.service';
-import { page } from './schemas/page.schema';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'; // أزلنا @Inject
+import { createRes, findAllRes, PageService } from './page.service';
 import { CreatePageDto } from './dtos/create-page.dto';
-import { AddProjectDto } from './dtos/add-project.dto';
+import mongoose, { ObjectId } from 'mongoose';
+
+
 
 @Controller('pages')
 export class PageController {
-  constructor(private readonly pageService: PageService) {}
+  constructor(private readonly pageService: PageService) { }
 
   @Get()
-  findAll(): Promise<{
-    message: string;
-    payload: page[];
-    totalCount: number;
-    count: number;
-  }> {
-    return this.pageService.findAll();
+  findAll(@Query("name") name: string): Promise<findAllRes> {
+    const filters = { ...(name && { name: { $regex: name, $options: 'i' } }) }
+    return this.pageService.findAll(filters);
+  }
+
+  @Get(":id")
+  findOne(@Param('id') id: ObjectId): Promise<createRes> {
+    return this.pageService.findOne(id)
   }
 
   @Post()
-  create(
-    @Body() data: CreatePageDto,
-  ): Promise<{ message: string; payload: page }> {
+  create(@Body() data: CreatePageDto): Promise<createRes> {
     return this.pageService.create(data);
-  }
-  @Post('projects')
-  createProject(@Body() body: AddProjectDto) {
-    return this.pageService.addProjects(body);
   }
 }

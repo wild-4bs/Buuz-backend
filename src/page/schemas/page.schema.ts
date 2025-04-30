@@ -6,10 +6,21 @@ import { project } from 'src/project/schemas/project.schema';
   timestamps: true,
 })
 export class page {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   name: string;
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Project' }] })
-  projects: project[];
 }
 
 export const pageSchema = SchemaFactory.createForClass(page);
+
+pageSchema.virtual('projects', {
+  ref: 'project',
+  localField: '_id',
+  foreignField: 'page'
+})
+pageSchema.virtual('values', {
+  ref: 'Value',
+  localField: '_id',
+  foreignField: 'page'
+})
+pageSchema.set('toObject', { virtuals: true })
+pageSchema.set('toJSON', { virtuals: true })

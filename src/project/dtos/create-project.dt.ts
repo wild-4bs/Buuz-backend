@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsNotEmpty()
@@ -19,4 +19,7 @@ export class CreateProjectDto {
   @IsNotEmpty()
   @IsString()
   readonly video: string;
+  @IsOptional()
+  @IsMongoId()
+  readonly page: any;
 }
